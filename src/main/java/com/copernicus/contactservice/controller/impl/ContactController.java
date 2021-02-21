@@ -46,7 +46,7 @@ public class ContactController implements IContactController {
     /** DELETE **/
     @DeleteMapping("contact/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteContact(Integer id) {
+    public void deleteContact(@PathVariable Integer id) {
         contactService.deleteContact(id);
     }
 }
