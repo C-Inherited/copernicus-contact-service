@@ -1,0 +1,8 @@
+GET http://localhost:8087/contact/
+
+###
+
+GET http://localhost:8085/contact/{{id}}
+
+###
+
