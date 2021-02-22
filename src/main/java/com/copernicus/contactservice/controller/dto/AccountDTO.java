@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 
 public class AccountDTO {
 
-
     private Integer id;
     @NotEmpty
     private String industry;
@@ -18,16 +17,15 @@ public class AccountDTO {
     @NotEmpty
     private String country;
 
-
     public AccountDTO() {
     }
 
     public AccountDTO(Integer id, @NotEmpty String industry, @NotNull @Min(value = 0, message = "can not less than 0") Integer employeeCount, @NotEmpty String city, @NotEmpty String country) {
-        this.id = id;
-        this.industry = industry;
-        this.employeeCount = employeeCount;
-        this.city = city;
-        this.country = country;
+        setId(id);
+        setIndustry(industry);
+        setEmployeeCount(employeeCount);
+        setCity(city);
+        setCountry(country);
     }
 
     public Integer getId() {

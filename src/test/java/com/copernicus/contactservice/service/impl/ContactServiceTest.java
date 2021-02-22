@@ -1,5 +1,6 @@
 package com.copernicus.contactservice.service.impl;
 
+import com.copernicus.contactservice.client.AccountClient;
 import com.copernicus.contactservice.controller.dto.ContactDTO;
 import com.copernicus.contactservice.enums.Industry;
 import com.copernicus.contactservice.model.Account;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -23,6 +25,9 @@ class ContactServiceTest {
 
     @Autowired
     ContactRepository contactRepository;
+
+    @Autowired
+    AccountClient accountClient;
 
     @Autowired
     AccountRepository accountRepository;
@@ -63,7 +68,6 @@ class ContactServiceTest {
     void getContact_CorrectId_GetCorrectContact() {
         Integer id = contactList.get(0).getId();
         ContactDTO contactDTO = contactService.getContact(id);
-
         assertEquals("Paul", contactDTO.getName());
         assertNotEquals("987-654-321", contactDTO.getPhoneNumber());
     }
@@ -80,15 +84,10 @@ class ContactServiceTest {
 
     @Test
     void postContact_NewContact_SavedToDatabase() {
-        ContactDTO contactDTO = new ContactDTO(new Contact("Ruben Kenobi", "444-444-444", "maythe4thbewithyou@newrepublic.com", "Kashyyyk S.L.", accountRepository.findAll().get(0)));
-        contactService.postContact(contactDTO);
-        Integer id = contactDTO.getId();
-        assertEquals(contactRepository.findById(id).get().getCompanyName(), "Kashyyyk S.L.");
-    }
-
-    @Test
-    void postContact_NewBadContact_ThrowError() {
-        ContactDTO contactDTO = new ContactDTO(new Contact("Ruben Kenobi", "666", "maythe4thbewithyou@newrepublic.com", "Kashyyyk S.L.", accountRepository.findAll().get(99)));
+        Account account = accountRepository.save(new Account(
+                Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands"
+        ));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Ruben Kenobi", "444-444-444", "maythe4thbewithyou@newrepublic.com", "Kashyyyk S.L.", account));
         contactService.postContact(contactDTO);
         Integer id = contactDTO.getId();
         assertEquals(contactRepository.findById(id).get().getCompanyName(), "Kashyyyk S.L.");
@@ -96,9 +95,32 @@ class ContactServiceTest {
 
     @Test
     void putContact() {
+        Account account = accountRepository.save(new Account(
+                Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands"
+        ));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123-456-789", "paul@paul.com", "Kashyyyk S.L.", account));
+        Integer id = contactList.get(0).getId();
+        contactService.putContact(id, contactDTO);
+        assertNotEquals("987-654-321", contactDTO.getPhoneNumber());
+        assertEquals(contactRepository.findById(id).get().getCompanyName(), "Kashyyyk S.L.");
+        assertEquals(contactRepository.getOne(id), contactDTO);
     }
 
     @Test
     void deleteContact() {
+    }
+
+    @Test
+    void checkAccountCreateContact_PostRequestNotAccount_Error(){
+        Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123-456-789", "paul@paul.com", "Kashyyyk S.L.", account));
+        assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
+    }
+
+    @Test
+    void checkAccountCreateContact_PutRequestNotAccount_Error(){
+        Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123-456-789", "paul@paul.com", "Kashyyyk S.L.", account));
+        assertThrows(InvalidDataAccessApiUsageException.class, () ->contactService.putContact(contactDTO.getId(), contactDTO));
     }
 }

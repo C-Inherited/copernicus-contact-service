@@ -5,7 +5,6 @@ import com.copernicus.contactservice.controller.dto.AccountDTO;
 import com.copernicus.contactservice.controller.dto.ContactDTO;
 import com.copernicus.contactservice.model.Account;
 import com.copernicus.contactservice.model.Contact;
-import com.copernicus.contactservice.repository.AccountRepository;
 import com.copernicus.contactservice.repository.ContactRepository;
 import com.copernicus.contactservice.service.interfaces.IContactService;
 import org.springframework.beans.factory.annotation.Autowired;

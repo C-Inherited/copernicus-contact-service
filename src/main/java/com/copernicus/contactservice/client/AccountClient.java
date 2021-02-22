@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface AccountClient {
 
     @GetMapping("/account/{id}")
-    public AccountDTO getAccount(@PathVariable Integer id);
-
+    AccountDTO getAccount(@PathVariable Integer id);
 
 }
