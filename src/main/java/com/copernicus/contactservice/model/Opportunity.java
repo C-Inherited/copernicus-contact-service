@@ -14,7 +14,7 @@ public class Opportunity {
     private Product product;
     private Integer quantity;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name="contact_id")
     private Contact decisionMaker;
 
@@ -44,7 +44,7 @@ public class Opportunity {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -94,6 +94,10 @@ public class Opportunity {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 
     @Override

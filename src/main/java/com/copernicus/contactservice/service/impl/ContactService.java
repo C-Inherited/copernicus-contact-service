@@ -45,7 +45,6 @@ public class ContactService implements IContactService {
     /** POST **/
     public ContactDTO postContact(ContactDTO contactDTO) {
         Contact contact = contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName()));
-
         contactDTO.setId(contact.getId());
         return contactDTO;
     }

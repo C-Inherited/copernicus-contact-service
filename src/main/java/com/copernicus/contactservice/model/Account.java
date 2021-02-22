@@ -25,12 +25,12 @@ public class Account {
     private String city;
     private String country;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "account")
     @Fetch(FetchMode.SUBSELECT)
     @JsonIgnore
     private List<Contact> contactList;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "account")
     @Fetch(FetchMode.SUBSELECT)
     @JsonIgnore
     private List<Opportunity> opportunityList;
@@ -59,11 +59,11 @@ public class Account {
         getOpportunityList().add(opportunity);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

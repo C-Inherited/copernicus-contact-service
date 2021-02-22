@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -33,18 +34,18 @@ class ContactServiceTest {
     @BeforeEach
     void setUp() {
 
-        Account account = accountRepository.save(
-                new Account(Industry.ECOMMERCE, 46, "Amarillo", "USA")
-        );
+        Account account = accountRepository.save(new Account(
+                Industry.ECOMMERCE, 389, "Amarillo", "USA"
+        ));
 
-   contactRepository.saveAll(List.of(
+        contactRepository.saveAll(List.of(
                 new Contact("Paul", "123-456-789", "paul@paul.com", "Futurama", account),
                 new Contact("Celia", "987-654-321", "celia@celia.com", "Futurama", account),
                 new Contact("Salvatore", "000-000-000", "corsaro@corsaro.com", "The Simpsons"),
                 new Contact("Nerea", "999-999-999", "nerea@nerea.com", "American Dad")
         ));
 
-   contactList = contactRepository.findAll();
+        contactList = contactRepository.findAll();
     }
 
     @AfterEach
@@ -54,19 +55,27 @@ class ContactServiceTest {
     }
 
     @Test
-    void getContact() {
-        Integer id = contactList.get(3).getId();
+    void getContact_CorrectId_GetCorrectContact() {
+        Integer id = contactList.get(0).getId();
         ContactDTO contactDTO = contactService.getContact(id);
 
         assertEquals("Paul", contactDTO.getName());
+        assertNotEquals("987-654-321", contactDTO.getPhoneNumber());
     }
 
     @Test
-    void getAllContact() {
+    void getContact_IncorrectId_ThrowError() {
+       assertThrows(ResponseStatusException.class, () ->contactService.getContact(1));
     }
 
     @Test
-    void postContact() {
+    void getAllContacts_CheckSize_CorrectSize() {
+        assertEquals(4, contactService.getAllContact().size());
+    }
+
+    @Test
+    void postContact_NewContact_SavedToDatabase() {
+
     }
 
     @Test
