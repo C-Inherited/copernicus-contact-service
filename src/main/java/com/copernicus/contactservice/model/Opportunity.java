@@ -1,7 +1,10 @@
 package com.copernicus.contactservice.model;
 
-import com.copernicus.contactservice.enums.*;
+import com.copernicus.contactservice.enums.Product;
+import com.copernicus.contactservice.enums.Status;
+
 import javax.persistence.*;
+
 import static com.copernicus.contactservice.utils.Colors.*;
 
 @Entity

@@ -1,6 +1,7 @@
 package com.copernicus.contactservice.controller.interfaces;
 
 import com.copernicus.contactservice.controller.dto.ContactDTO;
+
 import java.util.List;
 
 public interface IContactController {

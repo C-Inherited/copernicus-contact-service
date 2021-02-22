@@ -2,6 +2,7 @@ package com.copernicus.contactservice.model;
 
 import javax.persistence.*;
 import java.util.Objects;
+
 import static com.copernicus.contactservice.utils.Colors.*;
 
 @Entity
