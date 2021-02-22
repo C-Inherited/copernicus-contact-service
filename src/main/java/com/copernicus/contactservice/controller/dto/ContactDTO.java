@@ -31,6 +31,10 @@ public class ContactDTO {
         setAccountId(contact.getAccount().getId());
     }
 
+    public static ContactDTO parseFromContact(Contact contact){
+        return new ContactDTO(contact);
+    }
+
     public String getName() {
         return name;
     }

@@ -1,5 +1,6 @@
 package com.copernicus.contactservice.model;
 
+import com.copernicus.contactservice.controller.dto.AccountDTO;
 import com.copernicus.contactservice.enums.Industry;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Fetch;
@@ -47,6 +48,14 @@ public class Account {
         setCountry(country);
         setContactList(new ArrayList<>());
         setOpportunityList(new ArrayList<>());
+    }
+
+    public Account(AccountDTO accountDTO){
+        setId(accountDTO.getId());
+        setIndustry(Industry.valueOf(accountDTO.getIndustry()));
+        setEmployeeCount(accountDTO.getEmployeeCount());
+        setCity(accountDTO.getCity());
+        setCountry(accountDTO.getCountry());
     }
 
     // Method to add a contact to a contact list.

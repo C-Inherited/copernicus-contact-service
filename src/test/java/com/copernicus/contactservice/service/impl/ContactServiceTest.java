@@ -31,6 +31,7 @@ class ContactServiceTest {
     IContactService contactService;
 
     private List<Contact> contactList;
+
     @BeforeEach
     void setUp() {
 
@@ -38,11 +39,15 @@ class ContactServiceTest {
                 Industry.ECOMMERCE, 389, "Amarillo", "USA"
         ));
 
+        Account account2 = accountRepository.save(new Account(
+                Industry.MANUFACTURING, 10009, "Detroit", "USA"
+        ));
+
         contactRepository.saveAll(List.of(
                 new Contact("Paul", "123-456-789", "paul@paul.com", "Futurama", account),
                 new Contact("Celia", "987-654-321", "celia@celia.com", "Futurama", account),
-                new Contact("Salvatore", "000-000-000", "corsaro@corsaro.com", "The Simpsons"),
-                new Contact("Nerea", "999-999-999", "nerea@nerea.com", "American Dad")
+                new Contact("Salvatore", "000-000-000", "corsaro@corsaro.com", "The Simpsons", account2),
+                new Contact("Nerea", "999-999-999", "nerea@nerea.com", "American Dad", account2)
         ));
 
         contactList = contactRepository.findAll();
@@ -75,7 +80,18 @@ class ContactServiceTest {
 
     @Test
     void postContact_NewContact_SavedToDatabase() {
+        ContactDTO contactDTO = new ContactDTO(new Contact("Ruben Kenobi", "444-444-444", "maythe4thbewithyou@newrepublic.com", "Kashyyyk S.L.", accountRepository.findAll().get(0)));
+        contactService.postContact(contactDTO);
+        Integer id = contactDTO.getId();
+        assertEquals(contactRepository.findById(id).get().getCompanyName(), "Kashyyyk S.L.");
+    }
 
+    @Test
+    void postContact_NewBadContact_ThrowError() {
+        ContactDTO contactDTO = new ContactDTO(new Contact("Ruben Kenobi", "666", "maythe4thbewithyou@newrepublic.com", "Kashyyyk S.L.", accountRepository.findAll().get(99)));
+        contactService.postContact(contactDTO);
+        Integer id = contactDTO.getId();
+        assertEquals(contactRepository.findById(id).get().getCompanyName(), "Kashyyyk S.L.");
     }
 
     @Test

@@ -1,10 +1,17 @@
 package com.copernicus.contactservice.service.impl;
 
+import com.copernicus.contactservice.client.AccountClient;
+import com.copernicus.contactservice.controller.dto.AccountDTO;
 import com.copernicus.contactservice.controller.dto.ContactDTO;
+import com.copernicus.contactservice.model.Account;
 import com.copernicus.contactservice.model.Contact;
+import com.copernicus.contactservice.repository.AccountRepository;
 import com.copernicus.contactservice.repository.ContactRepository;
 import com.copernicus.contactservice.service.interfaces.IContactService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,6 +26,11 @@ public class ContactService implements IContactService {
 
     @Autowired
     ContactRepository contactRepository;
+
+    @Autowired
+    AccountClient accountClient;
+
+    private final CircuitBreakerFactory circuitBreakerFactory = new Resilience4JCircuitBreakerFactory();
 
     /** GET **/
     public ContactDTO getContact(Integer id) {
@@ -44,8 +56,7 @@ public class ContactService implements IContactService {
 
     /** POST **/
     public ContactDTO postContact(ContactDTO contactDTO) {
-        Contact contact = contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName()));
-        contactDTO.setId(contact.getId());
+        contactDTO.setId(checkAccountCreateContact(contactDTO).getId());
         return contactDTO;
     }
 
@@ -54,10 +65,8 @@ public class ContactService implements IContactService {
         if (!contactRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This is doesn't match any of our contacts");
         }
-
-        Contact contact = contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName()));
-        contact.setId(id);
-        contactDTO.setId(contact.getId());
+        checkAccountCreateContact(contactDTO).setId(id);
+        contactDTO.setId(checkAccountCreateContact(contactDTO).getId());
         return contactDTO;
     }
 
@@ -68,5 +77,16 @@ public class ContactService implements IContactService {
         }
 
         contactRepository.deleteById(id);
+    }
+
+    private AccountDTO contactCache() {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This account id doesn't match any of our accounts.");
+    }
+
+    private Contact checkAccountCreateContact(ContactDTO contactDTO) {
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
+        AccountDTO accountDTO = circuitBreaker.run(() -> accountClient.getAccount(contactDTO.getAccountId()), throwable -> contactCache());
+        Account account = new Account(accountDTO);
+        return contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName(), account));
     }
 }

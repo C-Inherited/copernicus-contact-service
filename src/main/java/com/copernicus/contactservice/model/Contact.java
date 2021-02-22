@@ -22,13 +22,6 @@ public class Contact {
     public Contact() {
     }
 
-    public Contact(String name, String phoneNumber, String email, String companyName) {
-        setName(name);
-        setPhoneNumber(phoneNumber);
-        setEmail(email);
-        setCompanyName(companyName);
-    }
-
     public Contact(String name, String phoneNumber, String email, String companyName, Account account) {
         setName(name);
         setPhoneNumber(phoneNumber);
