@@ -1,10 +1,19 @@
 package com.copernicus.contactservice.controller.impl;
 
+import com.copernicus.contactservice.controller.dto.AuthenticationRequest;
+import com.copernicus.contactservice.controller.dto.AuthenticationResponse;
 import com.copernicus.contactservice.controller.dto.ContactDTO;
 import com.copernicus.contactservice.controller.interfaces.IContactController;
+import com.copernicus.contactservice.security.MyUserDetailsService;
 import com.copernicus.contactservice.service.interfaces.IContactService;
+import com.copernicus.contactservice.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,6 +24,17 @@ public class ContactController implements IContactController {
 
     @Autowired
     IContactService contactService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtil jwtTokenUtil;
+
+    @Autowired
+    private MyUserDetailsService userDetailsService;
+
+    private static String contactAuthOk;
 
     /** GET **/
     @GetMapping("/contact/{id}")
@@ -49,5 +69,35 @@ public class ContactController implements IContactController {
     @ResponseStatus(HttpStatus.OK)
     public void deleteContact(@PathVariable Integer id) {
         contactService.deleteContact(id);
+    }
+
+    /** AUTHENTICATION **/
+    @PostMapping("contact/authenticate")
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+            );
+        }
+        catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
+
+
+        final UserDetails userDetails = userDetailsService
+                .loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtTokenUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    }
+
+    public static String getContactAuthOk() {
+        return contactAuthOk;
+    }
+
+    public static void setContactAuthOk(String contactAuthOk) {
+        ContactController.contactAuthOk = contactAuthOk;
     }
 }

@@ -86,7 +86,6 @@ public class ContactService implements IContactService {
     }
 
     /** VALIDATION METHODS **/
-
     private Contact checkAccountCreateContact(ContactDTO contactDTO) {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
         AccountDTO accountDTO = circuitBreaker.run(() -> accountClient.getAccount(contactDTO.getAccountId()), throwable -> contactCache());
@@ -102,7 +101,6 @@ public class ContactService implements IContactService {
     }
 
     /** THROWABLE **/
-
     private AccountDTO contactCache() {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This account id doesn't match any of our accounts.");
     }
