@@ -119,4 +119,8 @@ class ContactServiceTest {
         ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
         assertThrows(InvalidDataAccessApiUsageException.class, () ->contactService.putContact(contactDTO.getId(), contactDTO));
     }
+
+    //TODO Tests with bad format
+    //TODO Tests controllers when security is up
+    //TODO Check database
 }
