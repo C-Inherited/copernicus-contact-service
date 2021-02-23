@@ -120,6 +120,34 @@ class ContactServiceTest {
         assertThrows(InvalidDataAccessApiUsageException.class, () ->contactService.putContact(contactDTO.getId(), contactDTO));
     }
 
+    @Test
+    void validationContact_PostRequestBadValidationName_Error(){
+        Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
+        ContactDTO contactDTO = new ContactDTO(new Contact("1J!a", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
+        assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
+    }
+
+    @Test
+    void validationContact_PostRequestBadValidationEmail_Error(){
+        Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 123456789, "paul@paul", "Kashyyyk S.L.", account));
+        assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
+    }
+
+    @Test
+    void validationContact_PostRequestBadValidationPhone_Error(){
+        Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 12, "paul@paul.com", "Kashyyyk S.L.", account));
+        assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
+    }
+
+    @Test
+    void validationContact_PutRequestBadValidationName_Error(){
+        Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
+        ContactDTO contactDTO = new ContactDTO(new Contact("Mari@", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
+        assertThrows(ResponseStatusException.class, () ->contactService.putContact(contactDTO.getId(), contactDTO));
+    }
+
     //TODO Tests with bad format
     //TODO Tests controllers when security is up
     //TODO Check database
