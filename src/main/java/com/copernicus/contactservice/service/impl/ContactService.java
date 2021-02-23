@@ -1,8 +1,11 @@
 package com.copernicus.contactservice.service.impl;
 
 import com.copernicus.contactservice.client.AccountClient;
+import com.copernicus.contactservice.client.ValidationClient;
 import com.copernicus.contactservice.controller.dto.AccountDTO;
 import com.copernicus.contactservice.controller.dto.ContactDTO;
+import com.copernicus.contactservice.controller.dto.ValidationDTO;
+import com.copernicus.contactservice.enums.ValidationType;
 import com.copernicus.contactservice.model.Account;
 import com.copernicus.contactservice.model.Contact;
 import com.copernicus.contactservice.repository.ContactRepository;
@@ -28,6 +31,9 @@ public class ContactService implements IContactService {
 
     @Autowired
     AccountClient accountClient;
+
+    @Autowired
+    ValidationClient validationClient;
 
     private final CircuitBreakerFactory circuitBreakerFactory = new Resilience4JCircuitBreakerFactory();
 
@@ -55,6 +61,7 @@ public class ContactService implements IContactService {
 
     /** POST **/
     public ContactDTO postContact(ContactDTO contactDTO) {
+        validationContact(contactDTO);
         contactDTO.setId(checkAccountCreateContact(contactDTO).getId());
         return contactDTO;
     }
@@ -64,6 +71,7 @@ public class ContactService implements IContactService {
         if (!contactRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This is doesn't match any of our contacts");
         }
+        validationContact(contactDTO);
         checkAccountCreateContact(contactDTO).setId(id);
         contactDTO.setId(checkAccountCreateContact(contactDTO).getId());
         return contactDTO;
@@ -74,18 +82,45 @@ public class ContactService implements IContactService {
         if (!contactRepository.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This is doesn't match any of our contacts");
         }
-
         contactRepository.deleteById(id);
     }
 
-    private AccountDTO contactCache() {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This account id doesn't match any of our accounts.");
-    }
+    /** VALIDATION METHODS **/
 
     private Contact checkAccountCreateContact(ContactDTO contactDTO) {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
         AccountDTO accountDTO = circuitBreaker.run(() -> accountClient.getAccount(contactDTO.getAccountId()), throwable -> contactCache());
         Account account = new Account(accountDTO);
         return contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName(), account));
+    }
+
+    private boolean validationContact(ContactDTO contactDTO){
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
+        boolean nameIsValid = circuitBreaker.run(() -> validationClient.checkIsNameValid(new ValidationDTO(contactDTO.getName(), null, ValidationType.NAME)), throwable -> notValidName());
+        boolean emailIsValid = circuitBreaker.run(() -> validationClient.checkIsEmailValid(new ValidationDTO(contactDTO.getEmail(), null, ValidationType.NAME)), throwable -> notValidEmail());
+        boolean phoneIsValid = circuitBreaker.run(() -> validationClient.checkIsPhoneNumberValid(new ValidationDTO(contactDTO.getPhoneNumber(), null, ValidationType.NAME)), throwable -> notValidPhone());
+        if(nameIsValid == true && emailIsValid == true && phoneIsValid == true){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /** THROWABLE **/
+
+    private AccountDTO contactCache() {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This account id doesn't match any of our accounts.");
+    }
+
+    private Boolean notValidEmail() {
+        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Your email format is not correct.");
+    }
+
+    private Boolean notValidPhone() {
+        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Your phone number format is not correct.");
+    }
+
+    private Boolean notValidName() {
+        throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Your name format is not correct.");
     }
 }

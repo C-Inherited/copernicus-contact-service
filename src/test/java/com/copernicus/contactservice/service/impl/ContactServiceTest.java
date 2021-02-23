@@ -107,10 +107,6 @@ class ContactServiceTest {
     }
 
     @Test
-    void deleteContact() {
-    }
-
-    @Test
     void checkAccountCreateContact_PostRequestNotAccount_Error(){
         Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
         ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123-456-789", "paul@paul.com", "Kashyyyk S.L.", account));
