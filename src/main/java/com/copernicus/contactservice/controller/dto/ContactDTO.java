@@ -11,7 +11,7 @@ public class ContactDTO {
     @NotNull(message = "Name is required")
     private String name;
     @NotNull(message = "Phone number is required")
-    private String phoneNumber;
+    private Integer phoneNumber;
     @NotNull(message = "Email is required")
     private String email;
     @NotNull(message = "Company name is required")
@@ -43,11 +43,11 @@ public class ContactDTO {
         this.name = name;
     }
 
-    public String getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

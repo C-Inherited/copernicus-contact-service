@@ -12,7 +12,7 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String phoneNumber;
+    private Integer phoneNumber;
     private String email;
     private String companyName;
 
@@ -23,7 +23,7 @@ public class Contact {
     public Contact() {
     }
 
-    public Contact(String name, String phoneNumber, String email, String companyName, Account account) {
+    public Contact(String name, Integer phoneNumber, String email, String companyName, Account account) {
         setName(name);
         setPhoneNumber(phoneNumber);
         setEmail(email);
@@ -35,7 +35,7 @@ public class Contact {
         return name;
     }
 
-    public String getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -59,7 +59,7 @@ public class Contact {
         this.name = name;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

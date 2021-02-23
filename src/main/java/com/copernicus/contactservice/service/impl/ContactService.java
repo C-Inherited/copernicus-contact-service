@@ -94,16 +94,11 @@ public class ContactService implements IContactService {
         return contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName(), account));
     }
 
-    private boolean validationContact(ContactDTO contactDTO){
+    private void validationContact(ContactDTO contactDTO){
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
-        boolean nameIsValid = circuitBreaker.run(() -> validationClient.checkIsNameValid(new ValidationDTO(contactDTO.getName(), null, ValidationType.NAME)), throwable -> notValidName());
-        boolean emailIsValid = circuitBreaker.run(() -> validationClient.checkIsEmailValid(new ValidationDTO(contactDTO.getEmail(), null, ValidationType.NAME)), throwable -> notValidEmail());
-        boolean phoneIsValid = circuitBreaker.run(() -> validationClient.checkIsPhoneNumberValid(new ValidationDTO(contactDTO.getPhoneNumber(), null, ValidationType.NAME)), throwable -> notValidPhone());
-        if(nameIsValid == true && emailIsValid == true && phoneIsValid == true){
-            return true;
-        } else {
-            return false;
-        }
+        circuitBreaker.run(() -> validationClient.checkIsNameValid(new ValidationDTO(contactDTO.getName(), null, ValidationType.NAME)), throwable -> notValidName());
+        circuitBreaker.run(() -> validationClient.checkIsEmailValid(new ValidationDTO(contactDTO.getEmail(), null, ValidationType.NAME)), throwable -> notValidEmail());
+        circuitBreaker.run(() -> validationClient.checkIsPhoneNumberValid(new ValidationDTO(null, contactDTO.getPhoneNumber(), ValidationType.NAME)), throwable -> notValidPhone());
     }
 
     /** THROWABLE **/
