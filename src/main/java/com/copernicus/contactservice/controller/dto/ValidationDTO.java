@@ -7,14 +7,14 @@ import javax.validation.constraints.NotNull;
 
 public class ValidationDTO {
     private String strToValidate;
-    private Integer nmbToValidate;
+    private int nmbToValidate;
     @NotNull
     private ValidationType validationType;
 
     public ValidationDTO() {
     }
 
-    public ValidationDTO(String strToValidate, Integer nmbToValidate, @NotNull ValidationType validationType) {
+    public ValidationDTO(String strToValidate, int nmbToValidate, @NotNull ValidationType validationType) {
         this.strToValidate = strToValidate;
         this.nmbToValidate = nmbToValidate;
         this.validationType = validationType;
@@ -28,11 +28,11 @@ public class ValidationDTO {
         this.strToValidate = strToValidate;
     }
 
-    public Integer getNmbToValidate() {
+    public int getNmbToValidate() {
         return nmbToValidate;
     }
 
-    public void setNmbToValidate(Integer nmbToValidate) {
+    public void setNmbToValidate(int nmbToValidate) {
         this.nmbToValidate = nmbToValidate;
     }
 
