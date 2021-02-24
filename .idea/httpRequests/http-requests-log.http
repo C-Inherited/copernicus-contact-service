@@ -1,3 +1,226 @@
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{auth_token}}
+
+<> 2021-02-24T210759.500.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway"
+
+}
+
+<> 2021-02-24T210755.200.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{auth_token}}
+
+<> 2021-02-24T210736.500.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{auth_token}}
+
+<> 2021-02-24T210729.500.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway"
+
+}
+
+<> 2021-02-24T210725.200.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway",
+
+}
+
+<> 2021-02-24T210719.400.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{auth_token}}
+
+<> 2021-02-24T210715.500.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway",
+
+}
+
+<> 2021-02-24T210711.400.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{auth_token}}
+
+<> 2021-02-24T205806.500.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{auth_token}}
+
+<> 2021-02-24T205801.500.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway",
+
+}
+
+<> 2021-02-24T205753.200.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{variable}}
+
+<> 2021-02-24T205707.500.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{variable}}
+
+<> 2021-02-24T205702.500.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{variable}}
+
+<> 2021-02-24T205645.500.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnYXRld2F5IiwiZXhwIjoxNjE0MjMyNDY3LCJpYXQiOjE2MTQxOTY0Njd9.9G5rWjOjsvKNizRypHVM5YQQqyFCKXacgibXou_dFHY
+
+<> 2021-02-24T205557.200.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{password}}
+
+<> 2021-02-24T205439.500.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway"
+}
+
+<> 2021-02-24T205428.200.json
+
+###
+
+GET http://localhost:8087/contact/1
+Authorization: Bearer {{password}}
+
+<> 2021-02-24T205359.500.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway"
+}
+
+<> 2021-02-24T205350.200.json
+
+###
+
+GET http://localhost:8087/contact/1
+
+<> 2021-02-24T205127.400.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+"username":  "gateway",
+"password": "gateway"
+}
+
+<> 2021-02-24T204736.200.json
+
+###
+
+POST http://localhost:80/api/item
+Content-Type: application/json
+
+{"username":  "gateway",
+"password":  "gateway"}
+
+<> 2021-02-24T202621.404.html
+
+###
+
+POST http://localhost:8087/contact/authenticate
+
+<> 2021-02-24T202434.400.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+
+<> 2021-02-24T202255.400.json
+
+###
+
+POST http://localhost:8087/contact/authenticate
+
+<> 2021-02-24T202041.400.json
+
+###
+
+POST http://localhost:8080/contact/authenticate
+
+###
+
 GET http://localhost:8087/contact/
 
 ###

@@ -1,0 +1,7 @@
+{
+  "timestamp": "2021-02-24T19:58:05.550+00:00",
+  "status": 500,
+  "error": "Internal Server Error",
+  "message": "JWT strings must contain exactly 2 period characters. Found: 0",
+  "path": "/contact/1"
+}

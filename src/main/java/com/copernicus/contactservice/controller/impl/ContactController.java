@@ -41,40 +41,40 @@ public class ContactController implements IContactController {
     /** GET **/
     @GetMapping("/contact/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ContactDTO getContact(@PathVariable Integer id) {
+    public ContactDTO getContact(@PathVariable Integer id, @RequestHeader(value = "Authorization") String authorizationHeader) {
         return contactService.getContact(id);
     }
 
     /** GET **/
     @GetMapping("/contact/")
     @ResponseStatus(HttpStatus.OK)
-    public List<ContactDTO> getAllContact() {
+    public List<ContactDTO> getAllContact(@RequestHeader(value = "Authorization") String authorizationHeader) {
         return contactService.getAllContact();
     }
 
     /** POST **/
     @PostMapping("/new/contact/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ContactDTO postContact(@RequestBody @Valid ContactDTO contactDTO) {
+    public ContactDTO postContact(@RequestBody @Valid ContactDTO contactDTO, @RequestHeader(value = "Authorization") String authorizationHeader) {
         return contactService.postContact(contactDTO);
     }
 
     /** PUT **/
-    @PutMapping("contact/{id}")
+    @PutMapping("/contact/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ContactDTO putContact(@PathVariable Integer id,@RequestBody @Valid ContactDTO contactDTO) {
+    public ContactDTO putContact(@PathVariable Integer id,@RequestBody @Valid ContactDTO contactDTO, @RequestHeader(value = "Authorization") String authorizationHeader) {
         return contactService.putContact(id, contactDTO);
     }
 
     /** DELETE **/
-    @DeleteMapping("contact/{id}")
+    @DeleteMapping("/contact/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteContact(@PathVariable Integer id) {
+    public void deleteContact(@PathVariable Integer id, @RequestHeader(value = "Authorization") String authorizationHeader) {
         contactService.deleteContact(id);
     }
 
     /** AUTHENTICATION **/
-    @PostMapping("contact/authenticate")
+    @PostMapping("/contact/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
         try {

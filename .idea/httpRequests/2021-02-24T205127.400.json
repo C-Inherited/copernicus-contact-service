@@ -1,0 +1,7 @@
+{
+  "timestamp": "2021-02-24T19:51:26.597+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Missing request header 'Authorization' for method parameter of type String",
+  "path": "/contact/1"
+}

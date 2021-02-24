@@ -49,10 +49,10 @@ class ContactServiceTest {
         ));
 
         contactRepository.saveAll(List.of(
-                new Contact("Paul", 123456789, "paul@paul.com", "Futurama", account),
-                new Contact("Celia", 987654321, "celia@celia.com", "Futurama", account),
-                new Contact("Salvatore", 000000000, "corsaro@corsaro.com", "The Simpsons", account2),
-                new Contact("Nerea", 999999999, "nerea@nerea.com", "American Dad", account2)
+                new Contact("Paul", "123456789", "paul@paul.com", "Futurama", account),
+                new Contact("Celia", "987654321", "celia@celia.com", "Futurama", account),
+                new Contact("Salvatore", "000000000", "corsaro@corsaro.com", "The Simpsons", account2),
+                new Contact("Nerea", "999999999", "nerea@nerea.com", "American Dad", account2)
         ));
 
         contactList = contactRepository.findAll();
@@ -87,7 +87,7 @@ class ContactServiceTest {
         Account account = accountRepository.save(new Account(
                 Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands"
         ));
-        ContactDTO contactDTO = new ContactDTO(new Contact("Ruben Kenobi", 444444444, "maythe4thbewithyou@newrepublic.com", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Ruben Kenobi", "444444444", "maythe4thbewithyou@newrepublic.com", "Kashyyyk S.L.", account));
         contactService.postContact(contactDTO);
         Integer id = contactDTO.getId();
         assertEquals(contactRepository.findById(id).get().getCompanyName(), "Kashyyyk S.L.");
@@ -98,7 +98,7 @@ class ContactServiceTest {
         Account account = accountRepository.save(new Account(
                 Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands"
         ));
-        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123456789", "paul@paul.com", "Kashyyyk S.L.", account));
         Integer id = contactList.get(0).getId();
         contactService.putContact(id, contactDTO);
         assertNotEquals(987654321, contactDTO.getPhoneNumber());
@@ -109,47 +109,46 @@ class ContactServiceTest {
     @Test
     void checkAccountCreateContact_PostRequestNotAccount_Error(){
         Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
-        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123456789", "paul@paul.com", "Kashyyyk S.L.", account));
         assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
     }
 
     @Test
     void checkAccountCreateContact_PutRequestNotAccount_Error(){
         Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
-        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123456789", "paul@paul.com", "Kashyyyk S.L.", account));
         assertThrows(InvalidDataAccessApiUsageException.class, () ->contactService.putContact(contactDTO.getId(), contactDTO));
     }
 
     @Test
     void validationContact_PostRequestBadValidationName_Error(){
         Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
-        ContactDTO contactDTO = new ContactDTO(new Contact("1J!a", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("1J!a", "123456789", "paul@paul.com", "Kashyyyk S.L.", account));
         assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
     }
 
     @Test
     void validationContact_PostRequestBadValidationEmail_Error(){
         Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
-        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 123456789, "paul@paul", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "123456789", "paul@paul", "Kashyyyk S.L.", account));
         assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
     }
 
     @Test
     void validationContact_PostRequestBadValidationPhone_Error(){
         Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
-        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", 12, "paul@paul.com", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Paul Kenobi", "12", "paul@paul.com", "Kashyyyk S.L.", account));
         assertThrows(ResponseStatusException.class, () ->contactService.postContact(contactDTO));
     }
 
     @Test
     void validationContact_PutRequestBadValidationName_Error(){
         Account account = new Account(Industry.ECOMMERCE, 22, "Amsterdam", "Netherlands");
-        ContactDTO contactDTO = new ContactDTO(new Contact("Mari@", 123456789, "paul@paul.com", "Kashyyyk S.L.", account));
+        ContactDTO contactDTO = new ContactDTO(new Contact("Mari@", "123456789", "paul@paul.com", "Kashyyyk S.L.", account));
         assertThrows(ResponseStatusException.class, () ->contactService.putContact(contactDTO.getId(), contactDTO));
     }
 
     //TODO Tests with bad format
-    //TODO Tests controllers when security is up
-    //TODO Check database
+    //TODO Change urls gateaway and add headers
     //TODO understand security
 }

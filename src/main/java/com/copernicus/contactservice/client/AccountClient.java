@@ -14,4 +14,5 @@ public interface AccountClient {
 
     @PostMapping("account/authenticate")
     ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest);
+
 }

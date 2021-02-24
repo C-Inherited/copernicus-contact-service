@@ -108,7 +108,7 @@ public class ContactService implements IContactService {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
         circuitBreaker.run(() -> validationClient.checkIsNameValid(new ValidationDTO(contactDTO.getName(), null, ValidationType.NAME)), throwable -> notValidName());
         circuitBreaker.run(() -> validationClient.checkIsEmailValid(new ValidationDTO(contactDTO.getEmail(), null, ValidationType.EMAIL)), throwable -> notValidEmail());
-        circuitBreaker.run(() -> validationClient.checkIsPhoneNumberValid(new ValidationDTO(null, contactDTO.getPhoneNumber(), ValidationType.PHONE_NUMBER)), throwable -> notValidPhone());
+        circuitBreaker.run(() -> validationClient.checkIsPhoneNumberValid(new ValidationDTO(contactDTO.getPhoneNumber(), null, ValidationType.PHONE_NUMBER)), throwable -> notValidPhone());
     }
 
     /**
