@@ -5,6 +5,7 @@ import com.copernicus.contactservice.client.ValidationClient;
 import com.copernicus.contactservice.controller.dto.AccountDTO;
 import com.copernicus.contactservice.controller.dto.ContactDTO;
 import com.copernicus.contactservice.controller.dto.ValidationDTO;
+import com.copernicus.contactservice.controller.impl.ContactController;
 import com.copernicus.contactservice.enums.ValidationType;
 import com.copernicus.contactservice.model.Account;
 import com.copernicus.contactservice.model.Contact;
@@ -37,10 +38,12 @@ public class ContactService implements IContactService {
 
     private final CircuitBreakerFactory circuitBreakerFactory = new Resilience4JCircuitBreakerFactory();
 
-    /** GET **/
+    /**
+     * GET
+     **/
     public ContactDTO getContact(Integer id) {
 
-        if (!contactRepository.existsById(id)){
+        if (!contactRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This id doesn't match any of our contacts");
         }
 
@@ -52,23 +55,27 @@ public class ContactService implements IContactService {
     public List<ContactDTO> getAllContact() {
         List<ContactDTO> contactDTOList = new ArrayList<>();
 
-        for(Contact contact: contactRepository.findAll()){
+        for (Contact contact : contactRepository.findAll()) {
             contactDTOList.add(new ContactDTO(contact));
         }
 
         return contactDTOList;
     }
 
-    /** POST **/
+    /**
+     * POST
+     **/
     public ContactDTO postContact(ContactDTO contactDTO) {
         validationContact(contactDTO);
         contactDTO.setId(checkAccountCreateContact(contactDTO).getId());
         return contactDTO;
     }
 
-    /** PUT **/
+    /**
+     * PUT
+     **/
     public ContactDTO putContact(Integer id, ContactDTO contactDTO) {
-        if (!contactRepository.existsById(id)){
+        if (!contactRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This is doesn't match any of our contacts");
         }
         validationContact(contactDTO);
@@ -77,30 +84,36 @@ public class ContactService implements IContactService {
         return contactDTO;
     }
 
-    /** DELETE **/
+    /**
+     * DELETE
+     **/
     public void deleteContact(Integer id) {
-        if (!contactRepository.existsById(id)){
+        if (!contactRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This is doesn't match any of our contacts");
         }
         contactRepository.deleteById(id);
     }
 
-    /** VALIDATION METHODS **/
+    /**
+     * VALIDATION METHODS
+     **/
     private Contact checkAccountCreateContact(ContactDTO contactDTO) {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
-        AccountDTO accountDTO = circuitBreaker.run(() -> accountClient.getAccount(contactDTO.getAccountId()), throwable -> contactCache());
+        AccountDTO accountDTO = circuitBreaker.run(() -> accountClient.getAccount(contactDTO.getAccountId(), "Bearer "+ContactController.getContactAccountAuthOk()), throwable -> contactCache());
         Account account = new Account(accountDTO);
         return contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName(), account));
     }
 
-    private void validationContact(ContactDTO contactDTO){
+    private void validationContact(ContactDTO contactDTO) {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("contact-service");
         circuitBreaker.run(() -> validationClient.checkIsNameValid(new ValidationDTO(contactDTO.getName(), null, ValidationType.NAME)), throwable -> notValidName());
         circuitBreaker.run(() -> validationClient.checkIsEmailValid(new ValidationDTO(contactDTO.getEmail(), null, ValidationType.EMAIL)), throwable -> notValidEmail());
         circuitBreaker.run(() -> validationClient.checkIsPhoneNumberValid(new ValidationDTO(null, contactDTO.getPhoneNumber(), ValidationType.PHONE_NUMBER)), throwable -> notValidPhone());
     }
 
-    /** THROWABLE **/
+    /**
+     * THROWABLE
+     **/
     private AccountDTO contactCache() {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This account id doesn't match any of our accounts.");
     }

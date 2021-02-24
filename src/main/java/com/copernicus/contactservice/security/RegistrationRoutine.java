@@ -43,9 +43,9 @@ public class RegistrationRoutine {
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest("contact-service", "contact-service");
                 ResponseEntity<?> responseEntity= circuitBreaker.run(() -> validationClient.createAuthenticationToken(authenticationRequest), throwable -> fallbackTransaction("validation-service"));
                 if (responseEntity != null) {
-                    parseJWT(responseEntity);
+                    parseJWTValidation(responseEntity);
                     isValidationRegistered = true;
-                    log.info("Registered with contact-service auth token: {}", ContactController.getContactAuthOk());
+                    log.info("Registered with contact-service auth token: {}", ContactController.getContactAccountAuthOk());
                 }
             }
     }
@@ -58,16 +58,21 @@ public class RegistrationRoutine {
                 AuthenticationRequest authenticationRequest = new AuthenticationRequest("contact-service", "contact-service");
                 ResponseEntity<?> responseEntity= circuitBreaker.run(() -> accountClient.createAuthenticationToken(authenticationRequest), throwable -> fallbackTransaction("account-service"));
                 if (responseEntity != null) {
-                    parseJWT(responseEntity);
+                    parseJWTAccount(responseEntity);
                     isAccountRegistered = true;
-                    log.info("Registered with contact-service auth token: {}", ContactController.getContactAuthOk());
+                    log.info("Registered with contact-service auth token: {}", ContactController.getContactAccountAuthOk());
                 }
             }
     }
 
-    private void parseJWT(ResponseEntity<?> responseEntity) {
+    private void parseJWTAccount(ResponseEntity<?> responseEntity) {
         String auth = Objects.requireNonNull(responseEntity.getBody()).toString();
-        ContactController.setContactAuthOk(auth.substring(5, auth.length() - 1));
+        ContactController.setContactAccountAuthOk(auth.substring(5, auth.length() - 1));
+    }
+
+    private void parseJWTValidation(ResponseEntity<?> responseEntity) {
+        String auth = Objects.requireNonNull(responseEntity.getBody()).toString();
+        ContactController.setContactValidationAuthOk(auth.substring(5, auth.length() - 1));
     }
 
     private ResponseEntity<?> fallbackTransaction(String serviceName) {

@@ -34,7 +34,9 @@ public class ContactController implements IContactController {
     @Autowired
     private MyUserDetailsService userDetailsService;
 
-    private static String contactAuthOk;
+    private static String contactAccountAuthOk;
+    private static String contactValidationAuthOk;
+
 
     /** GET **/
     @GetMapping("/contact/{id}")
@@ -93,11 +95,19 @@ public class ContactController implements IContactController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
-    public static String getContactAuthOk() {
-        return contactAuthOk;
+    public static String getContactAccountAuthOk() {
+        return contactAccountAuthOk;
     }
 
-    public static void setContactAuthOk(String contactAuthOk) {
-        ContactController.contactAuthOk = contactAuthOk;
+    public static void setContactAccountAuthOk(String contactAccountAuthOk) {
+        ContactController.contactAccountAuthOk = contactAccountAuthOk;
+    }
+
+    public static String getContactValidationAuthOk() {
+        return contactValidationAuthOk;
+    }
+
+    public static void setContactValidationAuthOk(String contactValidationAuthOk) {
+        ContactController.contactValidationAuthOk = contactValidationAuthOk;
     }
 }

@@ -4,17 +4,14 @@ import com.copernicus.contactservice.controller.dto.AccountDTO;
 import com.copernicus.contactservice.controller.dto.AuthenticationRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient("account-service")
 public interface AccountClient {
 
     @GetMapping("/account/{id}")
-    AccountDTO getAccount(@PathVariable Integer id);
+    AccountDTO getAccount(@PathVariable Integer id, @RequestHeader(value = "Authorization") String authorizationHeader);
 
-    @PostMapping( "account/authenticate")
+    @PostMapping("account/authenticate")
     ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest);
 }
