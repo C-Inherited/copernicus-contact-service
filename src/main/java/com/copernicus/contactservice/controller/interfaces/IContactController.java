@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface IContactController {
 
-    ContactDTO getContact(Integer id, String authorizationHeader);
+    ContactDTO getContact(Integer id);
 
-    List<ContactDTO> getAllContact(String authorizationHeader);
+    List<ContactDTO> getAllContact();
 
-    ContactDTO postContact(ContactDTO contactDTO, String authorizationHeader);
+    ContactDTO postContact(ContactDTO contactDTO);
 
-    ContactDTO putContact(Integer id, ContactDTO contactDTO, String authorizationHeader);
+    ContactDTO putContact(Integer id, ContactDTO contactDTO);
 }

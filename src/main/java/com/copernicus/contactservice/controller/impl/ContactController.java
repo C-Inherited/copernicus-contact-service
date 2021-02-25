@@ -41,28 +41,28 @@ public class ContactController implements IContactController {
     /** GET **/
     @GetMapping("/contact/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ContactDTO getContact(@PathVariable Integer id, @RequestHeader(value = "Authorization") String authorizationHeader) {
+    public ContactDTO getContact(@PathVariable Integer id) {
         return contactService.getContact(id);
     }
 
     /** GET **/
     @GetMapping("/contact/")
     @ResponseStatus(HttpStatus.OK)
-    public List<ContactDTO> getAllContact(@RequestHeader(value = "Authorization") String authorizationHeader) {
+    public List<ContactDTO> getAllContact() {
         return contactService.getAllContact();
     }
 
     /** POST **/
     @PostMapping("/new/contact/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ContactDTO postContact(@RequestBody @Valid ContactDTO contactDTO, @RequestHeader(value = "Authorization") String authorizationHeader) {
+    public ContactDTO postContact(@RequestBody @Valid ContactDTO contactDTO) {
         return contactService.postContact(contactDTO);
     }
 
     /** PUT **/
     @PutMapping("/contact/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ContactDTO putContact(@PathVariable Integer id,@RequestBody @Valid ContactDTO contactDTO, @RequestHeader(value = "Authorization") String authorizationHeader) {
+    public ContactDTO putContact(@PathVariable Integer id,@RequestBody @Valid ContactDTO contactDTO) {
         return contactService.putContact(id, contactDTO);
     }
 
