@@ -66,13 +66,6 @@ public class ContactController implements IContactController {
         return contactService.putContact(id, contactDTO);
     }
 
-    /** DELETE **/
-    @DeleteMapping("/contact/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteContact(@PathVariable Integer id, @RequestHeader(value = "Authorization") String authorizationHeader) {
-        contactService.deleteContact(id);
-    }
-
     /** AUTHENTICATION **/
     @PostMapping("/contact/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {

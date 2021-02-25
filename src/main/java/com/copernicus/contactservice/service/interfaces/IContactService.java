@@ -10,7 +10,5 @@ public interface IContactService {
     List<ContactDTO> getAllContact();
     ContactDTO postContact(ContactDTO contactDTO);
     ContactDTO putContact(Integer id, ContactDTO contactDTO);
-    void deleteContact(Integer id);
-
 
 }

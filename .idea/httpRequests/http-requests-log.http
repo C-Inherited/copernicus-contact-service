@@ -1,3 +1,37 @@
+GET http://localhost:8080/contact/49
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnYXRld2F5IiwiZXhwIjoxNjE0MzA5ODc1LCJpYXQiOjE2MTQyNzM4NzV9.LGqEJBkkLE5jfZXkQpJ_ksa72KIHgcdZ8rMRhMdR4Yc
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway"
+}
+
+<> 2021-02-25T182832.200.json
+
+###
+
+GET http://localhost:8080/contact/49
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnYXRld2F5IiwiZXhwIjoxNjE0MzA5ODc1LCJpYXQiOjE2MTQyNzM4NzV9.LGqEJBkkLE5jfZXkQpJ_ksa72KIHgcdZ8rMRhMdR4Yc
+
+###
+
+POST http://localhost:8087/contact/authenticate
+Content-Type: application/json
+
+{
+  "username": "gateway",
+  "password": "gateway"
+}
+
+<> 2021-02-25T182437.200.json
+
+###
+
 GET http://localhost:8087/contact/1
 Authorization: Bearer {{auth_token}}
 

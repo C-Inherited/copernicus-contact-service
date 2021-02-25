@@ -15,6 +15,4 @@ public interface IContactController {
     ContactDTO postContact(ContactDTO contactDTO, String authorizationHeader);
 
     ContactDTO putContact(Integer id, ContactDTO contactDTO, String authorizationHeader);
-
-    void deleteContact(Integer id, String authorizationHeader);
 }
