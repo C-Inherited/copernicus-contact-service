@@ -45,7 +45,7 @@ public class RegistrationRoutine {
                 if (responseEntity != null) {
                     parseJWTValidation(responseEntity);
                     isValidationRegistered = true;
-                    log.info("Registered with contact-service auth token: {}", ContactController.getContactAccountAuthOk());
+                    log.info("Registered with validation-service auth token: {}", ContactController.getContactAccountAuthOk());
                 }
             }
     }

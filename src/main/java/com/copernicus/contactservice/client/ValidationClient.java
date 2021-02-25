@@ -11,17 +11,17 @@ import javax.validation.Valid;
 @FeignClient("validation-service")
 public interface ValidationClient {
 
-    @GetMapping("validation/email")
-    boolean checkIsEmailValid(@RequestBody @Valid ValidationDTO validationDTO);
+    @PostMapping("validation/email")
+    boolean checkIsEmailValid(@RequestBody @Valid ValidationDTO validationDTO, @RequestHeader(value = "Authorization") String authorizationHeader);
 
-    @GetMapping("validation/name")
-    boolean checkIsNameValid(@RequestBody @Valid ValidationDTO validationDTO);
+    @PostMapping("validation/name")
+    boolean checkIsNameValid(@RequestBody @Valid ValidationDTO validationDTO, @RequestHeader(value = "Authorization") String authorizationHeader);
 
-    @GetMapping("validation/phone-number")
-    boolean checkIsPhoneNumberValid(@RequestBody @Valid ValidationDTO validationDTO);
+    @PostMapping("validation/phone-number")
+    boolean checkIsPhoneNumberValid(@RequestBody @Valid ValidationDTO validationDTO, @RequestHeader(value = "Authorization") String authorizationHeader);
 
-    @GetMapping("validation/country")
-    boolean checkIsCountryValid(@RequestBody @Valid ValidationDTO validationDTO);
+    @PostMapping("validation/country")
+    boolean checkIsCountryValid(@RequestBody @Valid ValidationDTO validationDTO, @RequestHeader(value = "Authorization") String authorizationHeader);
 
     @PostMapping( "validation/authenticate")
     ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest);
