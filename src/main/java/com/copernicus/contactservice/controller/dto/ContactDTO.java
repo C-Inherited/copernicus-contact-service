@@ -1,5 +1,6 @@
 package com.copernicus.contactservice.controller.dto;
 
+import com.copernicus.contactservice.model.Account;
 import com.copernicus.contactservice.model.Contact;
 
 import javax.validation.constraints.Min;

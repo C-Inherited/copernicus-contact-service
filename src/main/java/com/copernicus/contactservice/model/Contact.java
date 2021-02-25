@@ -31,6 +31,15 @@ public class Contact {
         setAccount(account);
     }
 
+    public Contact(Integer id, String name, String phoneNumber, String email, String companyName, Account account) {
+        setId(id);
+        setName(name);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        setCompanyName(companyName);
+        setAccount(account);
+    }
+
     public String getName() {
         return name;
     }

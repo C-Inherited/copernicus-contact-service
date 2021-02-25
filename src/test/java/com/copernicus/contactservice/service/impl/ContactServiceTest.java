@@ -148,7 +148,4 @@ class ContactServiceTest {
         assertThrows(ResponseStatusException.class, () ->contactService.putContact(contactDTO.getId(), contactDTO));
     }
 
-    //TODO Tests with bad format
-    //TODO Change urls gateaway and add headers
-    //TODO understand security
 }
