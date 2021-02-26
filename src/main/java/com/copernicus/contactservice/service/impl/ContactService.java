@@ -81,7 +81,9 @@ public class ContactService implements IContactService {
         if (!contactRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "This is doesn't match any of our contacts");
         }
+        contactDTO.setId(id);
         if (validationContact(contactDTO)) {
+            System.out.println(id);
             checkAccountCreateContact(contactDTO).setId(id);
             contactDTO.setId(checkAccountCreateContact(contactDTO).getId());
             return contactDTO;
@@ -97,7 +99,7 @@ public class ContactService implements IContactService {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("account-service");
         AccountDTO accountDTO = circuitBreaker.run(() -> accountClient.getAccount(contactDTO.getAccountId(), "Bearer "+ContactController.getContactAccountAuthOk()), throwable -> contactCache());
         Account account = new Account(accountDTO);
-        return contactRepository.save(new Contact(contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName(), account));
+        return contactRepository.save(new Contact(contactDTO.getId(), contactDTO.getName(), contactDTO.getPhoneNumber(), contactDTO.getEmail(), contactDTO.getCompanyName(), account));
     }
 
     private Boolean validationContact(ContactDTO contactDTO) {
@@ -105,6 +107,7 @@ public class ContactService implements IContactService {
         Boolean nameIsValid = circuitBreaker.run(() ->validationClient.checkIsNameValid(new ValidationDTO(contactDTO.getName(), 0, ValidationType.NAME), "Bearer "+ContactController.getContactValidationAuthOk()), throwable -> notValidName());
         Boolean emailIsValid = circuitBreaker.run(() -> validationClient.checkIsEmailValid(new ValidationDTO(contactDTO.getEmail(), 0, ValidationType.EMAIL), "Bearer "+ContactController.getContactValidationAuthOk()), throwable -> notValidEmail());
         Boolean phoneIsValid = circuitBreaker.run(() -> validationClient.checkIsPhoneNumberValid(new ValidationDTO(contactDTO.getPhoneNumber(), 0, ValidationType.PHONE_NUMBER), "Bearer "+ContactController.getContactValidationAuthOk()), throwable -> notValidPhone());
+
         if (nameIsValid && emailIsValid && phoneIsValid) {
             return true;
         } else {
